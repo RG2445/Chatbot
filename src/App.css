@@ -1,0 +1,71 @@
+.chat-container {
+  width: 400px;
+  height: 500px;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.messages {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  background-color: #fff;
+}
+
+.message {
+  margin: 10px 0;
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+.message.bot {
+  background-color: #e1f5fe;
+  align-self: flex-start;
+  color: #333;
+}
+
+.message.user {
+  background-color: #c8e6c9;
+  align-self: flex-end;
+  color: #333;
+}
+
+.input-area {
+  display: flex;
+  padding: 10px;
+  background-color: #eee;
+}
+
+.input-area input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.input-area button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.input-area button:hover {
+  background-color: #45a049;
+}
