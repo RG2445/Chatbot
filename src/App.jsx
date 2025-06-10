@@ -14,7 +14,7 @@ function App() {
   const getBotResponse = async (userInput) => {
       const question = userInput;
       try {
-        const res = await fetch(`http://localhost:3000/api/content`, {
+        const res = await fetch(`https://chatbot-6l9j.onrender.com/api/content`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ question }),
