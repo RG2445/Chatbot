@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import config from "./config";
 import "./App.css";
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
   const getBotResponse = async (userInput) => {
       const question = userInput;
       try {
-        const res = await fetch('http://localhost:3000/api/content', {
+        const res = await fetch(`${config.API_BASE_URL}/api/content`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ question }),
@@ -27,7 +28,7 @@ function App() {
       }
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
 
     const userMessage = { sender: "user", text: input };
@@ -36,10 +37,24 @@ function App() {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
 
-    setTimeout(() => {
-      const botReply = { sender: "bot", text: getBotResponse(userInput) };
-      setMessages((prev) => [...prev, botReply]);
-    }, 10); // 0.01 second delay for bot
+    // Add loading message
+    const loadingMessage = { sender: "bot", text: "Thinking..." };
+    setMessages((prev) => [...prev, loadingMessage]);
+
+    try {
+      const botResponse = await getBotResponse(userInput);
+      setMessages((prev) => {
+        const newMessages = [...prev];
+        newMessages[newMessages.length - 1] = { sender: "bot", text: botResponse };
+        return newMessages;
+      });
+    } catch (error) {
+      setMessages((prev) => {
+        const newMessages = [...prev];
+        newMessages[newMessages.length - 1] = { sender: "bot", text: "Sorry, I encountered an error. Please try again." };
+        return newMessages;
+      });
+    }
   };
 
   const handleKeyDown = (e) => {
