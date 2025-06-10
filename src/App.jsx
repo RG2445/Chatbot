@@ -11,13 +11,20 @@ function App() {
   ]);
   const messagesEndRef = useRef(null); // for auto scroll
 
-  const getBotResponse = (userInput) => {
-    const input = userInput.toLowerCase();
-    if (input.includes("hello") || input.includes("hi")) return "Hello there 😊";
-    if (input.includes("how are you") || input.includes("kaise ho")) return "I am great 😊, how are you?";
-    if (input.includes("your name")) return "I am a simple chat bot.";
-    if (input.includes("bye")) return "Goodbye 😊, have a great day!";
-    return "Sorry! I did not understand that T_T";
+  const getBotResponse = async (userInput) => {
+      const question = userInput;
+      try {
+        const res = await fetch('http://localhost:3000/api/content', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question }),
+        });
+
+        const data = await res.json();
+        return data.result || 'No response received.';
+      } catch (err) {
+        return 'Error: ' + err.message;
+      }
   };
 
   const handleSend = () => {
@@ -32,7 +39,7 @@ function App() {
     setTimeout(() => {
       const botReply = { sender: "bot", text: getBotResponse(userInput) };
       setMessages((prev) => [...prev, botReply]);
-    }, 800); // 0.8 second delay for bot
+    }, 10); // 0.01 second delay for bot
   };
 
   const handleKeyDown = (e) => {
