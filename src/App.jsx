@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import config from "./config";
 import "./App.css";
 
 function App() {
@@ -15,7 +14,7 @@ function App() {
   const getBotResponse = async (userInput) => {
       const question = userInput;
       try {
-        const res = await fetch(`${config.API_BASE_URL}/api/content`, {
+        const res = await fetch(`http://localhost:3000/api/content`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ question }),
