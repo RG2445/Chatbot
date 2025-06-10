@@ -9,29 +9,37 @@ function App() {
       text: "Heyy! I am your assistant. How can I help you today?",
     },
   ]);
-  const messagesEndRef = useRef(null); // for auto scroll
+  const messagesEndRef = useRef(null);
+
+
+  const fixedReplies = {
+    "hello": "Hi there! How can I assist you😊?",
+    "how are you": "I'm just code, but I'm running smoothly😌❤️!",
+    "what is your name": "I'm your gulaam😌!",
+    "who made you": "I was created by Rishit and Sourabh using React and Gemini API🍾😌.",
+  };
 
   const getBotResponse = async (userInput) => {
-      const question = userInput;
-      try {
-        const res = await fetch(`https://chatbot-6l9j.onrender.com/api/content`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ question }),
-        });
+    const question = userInput;
+    try {
+      const res = await fetch(`https://chatbot-6l9j.onrender.com/api/content`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question }),
+      });
 
-        const data = await res.json();
-        return data.result || 'No response received.';
-      } catch (err) {
-        return 'Error: ' + err.message;
-      }
+      const data = await res.json();
+      return data.result || 'No response received.';
+    } catch (err) {
+      return 'Error: ' + err.message;
+    }
   };
 
   const handleSend = async () => {
     if (!input.trim()) return;
 
     const userMessage = { sender: "user", text: input };
-    const userInput = input;
+    const userInput = input.toLowerCase().trim();
 
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
@@ -40,6 +48,16 @@ function App() {
     const loadingMessage = { sender: "bot", text: "Thinking..." };
     setMessages((prev) => [...prev, loadingMessage]);
 
+   
+    const reply = fixedReplies[userInput];
+    if (reply) {
+      setMessages((prev) => {
+        const newMessages = [...prev];
+        newMessages[newMessages.length - 1] = { sender: "bot", text: reply };
+        return newMessages;
+      });
+      return;
+    }
     try {
       const botResponse = await getBotResponse(userInput);
       setMessages((prev) => {
@@ -60,7 +78,6 @@ function App() {
     if (e.key === "Enter") handleSend();
   };
 
-  // Auto-scroll to the newest message
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
